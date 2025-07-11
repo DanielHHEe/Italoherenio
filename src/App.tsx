@@ -1,26 +1,38 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import italo from './assets/imagens/italo.jpeg';
 import tessat from './assets/imagens/tessat.webp';
 import ufma from './assets/imagens/ufma.jpg';
 
 const LandingPage = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [formData, setFormData] = useState({name: '',email: '',subject: '',message: ''});
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    subject: '',
+    message: ''
+  });
 
   const scrollToSection = (s: string) => {
     document.getElementById(s)?.scrollIntoView({behavior: 'smooth'});
     setIsMenuOpen(false);
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    console.log('Form submitted:', formData);
-    alert('Mensagem enviada com sucesso!');
-    setFormData({name: '',email: '',subject: '',message: ''});
-  };
-
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setFormData({...formData, [e.target.name]: e.target.value});
+  };
+
+  const enviarMensagem = (event: React.FormEvent) => {
+    event.preventDefault();
+    
+    const nome = formData.name;
+    const mensagem = `Assunto: ${formData.subject}\nMensagem: ${formData.message}\nEmail: ${formData.email}`;
+    const telefone = '5599991866408';
+    const texto = `Olá, me chamo ${nome}, ${mensagem}`;
+    const msgFormatada = encodeURIComponent(texto);
+    const url = `https://wa.me/${telefone}/?text=${msgFormatada}`;
+    
+    window.open(url, '_blank');
+    setFormData({name: '', email: '', subject: '', message: ''});
   };
 
   return (
@@ -238,29 +250,59 @@ const LandingPage = () => {
               <div className="contact-icon">📍</div>
               <div>
                 <h4>Localização</h4>
-                
                 <p style={{color:'#a0a0a0'}}>Imperatriz, Maranhão </p>
               </div>
             </div>
           </div>
-          <form className="contact-form" onSubmit={handleSubmit}>
+          <form className="contact-form" onSubmit={enviarMensagem}>
             <div className="form-row">
               <div className="form-group">
                 <label className="form-label">Nome</label>
-                <input type="text" name="name" value={formData.name} onChange={handleChange} className="form-input" placeholder="Seu nome" required/>
+                <input 
+                  type="text" 
+                  name="name" 
+                  value={formData.name} 
+                  onChange={handleChange} 
+                  className="form-input" 
+                  placeholder="Seu nome" 
+                  required
+                />
               </div>
               <div className="form-group">
                 <label className="form-label">Email</label>
-                <input type="email" name="email" value={formData.email} onChange={handleChange} className="form-input" placeholder="seu@email.com" required/>
+                <input 
+                  type="email" 
+                  name="email" 
+                  value={formData.email} 
+                  onChange={handleChange} 
+                  className="form-input" 
+                  placeholder="seu@email.com" 
+                  required
+                />
               </div>
             </div>
             <div className="form-group">
               <label className="form-label">Assunto</label>
-              <input type="text" name="subject" value={formData.subject} onChange={handleChange} className="form-input" placeholder="Sobre o que você quer falar?" required/>
+              <input 
+                type="text" 
+                name="subject" 
+                value={formData.subject} 
+                onChange={handleChange} 
+                className="form-input" 
+                placeholder="Sobre o que você quer falar?" 
+                required
+              />
             </div>
             <div className="form-group">
               <label className="form-label">Mensagem</label>
-              <textarea name="message" value={formData.message} onChange={handleChange} className="form-textarea" placeholder="Conte-me sobre seu projeto..." required/>
+              <textarea 
+                name="message" 
+                value={formData.message} 
+                onChange={handleChange} 
+                className="form-textarea" 
+                placeholder="Conte-me sobre seu projeto..." 
+                required
+              />
             </div>
             <button type="submit" className="form-submit">Enviar Mensagem 🚀</button>
           </form>
@@ -293,7 +335,6 @@ const LandingPage = () => {
               <ul>
                 <li>React & Next.js</li>
                 <li>js & typescript</li>
-               
               </ul>
             </div>
           </div>
